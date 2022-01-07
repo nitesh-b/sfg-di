@@ -1,5 +1,7 @@
 package com.niteshb.sfgdi.config;
 
+import com.niteshb.sfgdi.repositories.EnglishGreetingRepo;
+import com.niteshb.sfgdi.repositories.EnglishGreetingRepoImpl;
 import com.niteshb.sfgdi.services.ConstructorGreetingService;
 import com.niteshb.sfgdi.services.I18EnglishGreetingService;
 import com.niteshb.sfgdi.services.I18SpanishGreetingService;
@@ -8,10 +10,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
 
 @Configuration
 public class GreetingServiceConfig {
+
+    @Bean
+    EnglishGreetingRepo englishGreetingRepo(){
+        return new EnglishGreetingRepoImpl();
+    }
+
 
     @Bean
     ConstructorGreetingService constructorGreetingService(){
@@ -20,8 +27,8 @@ public class GreetingServiceConfig {
 
     @Profile("EN")
     @Bean("i18nService")
-    I18EnglishGreetingService i18EnglishGreetingService(){
-        return new I18EnglishGreetingService();
+    I18EnglishGreetingService i18EnglishGreetingService(EnglishGreetingRepo englishGreetingRepo){
+        return new I18EnglishGreetingService(englishGreetingRepo);
     }
 
     @Profile({"ES", "default"})
